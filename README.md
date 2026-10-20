@@ -218,17 +218,5 @@ docker-compose up --build -d
 
 ---
 
-## 💼 Portfolio & Resume Highlights
-
-```markdown
-- Engineered URLShield, an enterprise-grade Phishing Intelligence and Threat Detection Platform in Python, Flask, and scikit-learn, processing real-time URLs with zero network egress (SSRF-immune).
-- Designed a 22-dimensional feature engineering pipeline extracting lexical, host-structural (tldextract), and Shannon entropy signals with full train-inference parity.
-- Implemented GroupKFold domain-stratified cross-validation across 2,191 unique domains to eliminate optimistic domain leakage, achieving 95.51% accuracy, 95.93% precision, and 0.9900 ROC-AUC on unseen held-out infrastructure.
-- Calibrated probability estimates with Platt sigmoid scaling and engineered an automated feature attribution explainer for SOC analysts.
-- Built a modular RESTful API and responsive security dashboard with rate-limiting, SQLite/PostgreSQL persistence, query credential redaction, CSV export, and 100% test coverage (27/27 pytest passing).
-```
-
----
-
 ## 📄 License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
