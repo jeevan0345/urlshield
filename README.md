@@ -72,35 +72,43 @@ flowchart TD
 
 ---
 
-## 🛠️ Quickstart (Windows PowerShell)
+## 🛠️ Quickstart
 
-### 1. Clone & Set Up Virtual Environment
+### Method A: One-Click Run (Windows)
+Double-click `run.bat` in the project folder, or run:
+```cmd
+run.bat
+```
+This automatically uses `.venv` and launches the application at **[http://localhost:5000](http://localhost:5000)**.
+
+---
+
+### Method B: Command Prompt (cmd.exe)
+
+```cmd
+# 1. Activate the virtual environment
+.\.venv\Scripts\activate.bat
+
+# 2. Run the test suite
+pytest -v
+
+# 3. Launch the dashboard
+python run.py
+```
+> Alternatively without activating: `.\.venv\Scripts\python.exe run.py`
+
+---
+
+### Method C: Windows PowerShell
 
 ```powershell
-# Clone the repository
-git clone https://github.com/jeevan0345/urlshield.git
-cd urlshield
-
-# Create and activate Python virtual environment
-python -m venv .venv
+# 1. Activate the virtual environment
 .\.venv\Scripts\Activate.ps1
 
-# Upgrade pip and install pinned dependencies
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-```
-
-### 2. Run Comprehensive Test Suite
-
-```powershell
+# 2. Run the test suite
 pytest -v
-```
 
-All 27 unit and integration tests will execute, validating URL normalization, feature extraction parity, ML inference, database operations, and API contracts.
-
-### 3. Launch the Application
-
-```powershell
+# 3. Launch the dashboard
 python run.py
 ```
 
