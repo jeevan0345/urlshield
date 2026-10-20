@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}URL Threat Scanner | URLShield{% endblock %}
+{% block heading %}Interactive URL Threat Scanner{% endblock %}
+
+{% block content %}
+<div class="scanner-box">
+  <div class="card-header" style="margin-bottom:8px;">
+    <div>
+      <h2 class="card-title" style="font-size:1.25rem;">Real-Time Lexical & Host Analysis</h2>
+      <p class="card-subtitle">Zero-SSRF inspection: Strings are safely parsed without issuing network requests</p>
+    </div>
+    <span class="badge-risk low">SSRF Immunity Guaranteed</span>
+  </div>
+
+  <form id="scanForm" class="scanner-form">
+    <div class="input-wrapper">
+      <input type="text" id="urlInput" class="url-input" placeholder="Paste suspicious or legitimate URL (http/https)..." required autocomplete="off">
+    </div>
+    <button type="submit" id="scanBtn" class="btn-scan">
+      <span>Analyze URL</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+  </form>
+
+  <div id="scanErrorBox" style="display:none; margin-top:12px; padding:10px 14px; background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); border-radius:var(--radius-sm); color:#fca5a5; font-size:0.85rem;"></div>
+
+  <div class="sample-pills">
+    <span class="sample-title">Preset Test Cases:</span>
+    <button type="button" class="sample-btn" data-url="https://www.google.com">Google (Verified Clean)</button>
+    <button type="button" class="sample-btn" data-url="https://github.com/torvalds/linux">GitHub (Verified Clean)</button>
+    <button type="button" class="sample-btn" data-url="http://paypal-verification-account-update.info/login?cmd=_login-run">PayPal Spoof (Credential Phish)</button>
+    <button type="button" class="sample-btn" data-url="http://appleid-security-apple-com.support-auth.com/account/manage">AppleID (Homograph Phish)</button>
+    <button type="button" class="sample-btn" data-url="http://192.168.1.105/bank/secure-login/index.html">IP Address Host (Phish)</button>
+    <button type="button" class="sample-btn" data-url="http://xn--appl-43d.com/secure/login">Punycode IDN Spoof</button>
+  </div>
+</div>
+
+<!-- Scan Result Card -->
+<div id="scanResultCard" class="scan-result-card" style="display:none;">
+  <div class="result-header">
+    <div>
+      <span style="font-size:0.75rem; color:var(--text-dim); text-transform:uppercase; font-weight:600;">Sanitized Target</span>
+      <div id="resUrl" style="font-family:var(--font-mono); font-size:1.1rem; font-weight:600; color:#fff; word-break:break-all; margin-top:2px;"></div>
+    </div>
+    <div id="resBadge" class="badge-risk low">Safe / Low Risk</div>
+  </div>
+
+  <div class="risk-meter-wrapper">
+    <div class="risk-meter-labels">
+      <span>Calibrated Phishing Probability</span>
+      <span id="resProbVal" style="font-family:var(--font-mono); font-weight:600;">0%</span>
+    </div>
+    <div class="meter-track">
+      <div id="resMeterFill" class="meter-fill" style="width:0%;"></div>
+    </div>
+  </div>
+
+  <div style="margin-top:20px;">
+    <h3 style="font-size:0.95rem; font-weight:600; color:#fff; margin-bottom:10px;">Contributing Lexical & Structural Indicators</h3>
+    <div id="resFactors" class="factors-list"></div>
+  </div>
+
+  <div style="margin-top:24px; padding-top:16px; border-top:1px solid var(--border-subtle);">
+    <details>
+      <summary style="font-size:0.85rem; color:var(--accent-teal); cursor:pointer; font-weight:500;">View Raw 22-Feature Extraction Vector &rarr;</summary>
+      <pre id="resFeaturesJson" style="margin-top:12px; background:#0b1120; border:1px solid var(--border-subtle); padding:16px; border-radius:var(--radius-sm); font-size:0.75rem; overflow:auto; max-height:260px; color:#cbd5e1;"></pre>
+    </details>
+  </div>
+</div>
+{% endblock %}

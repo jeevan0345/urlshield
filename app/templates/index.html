@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}URLShield | Enterprise Security Dashboard{% endblock %}
+{% block heading %}Dashboard Overview{% endblock %}
+
+{% block content %}
+<!-- Telemetry Statistics Grid -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-label">Total Audited URLs</div>
+    <div class="stat-value" id="statTotalScans">{{ stats.total_scans }}</div>
+    <div class="stat-meta">Recorded in persistent database</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-label">Phishing Flagged</div>
+    <div class="stat-value" style="color:var(--status-danger);">{{ stats.phishing_scans }}</div>
+    <div class="stat-meta">High & medium risk classifications</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-label">Legitimate Clean</div>
+    <div class="stat-value" style="color:var(--status-safe);">{{ stats.legitimate_scans }}</div>
+    <div class="stat-meta">Verified safe domain structures</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-label">Model Test Accuracy</div>
+    <div class="stat-value" style="color:var(--accent-teal);">
+      {% if metrics.accuracy %}{{ (metrics.accuracy * 100)|round(1) }}%{% else %}95.5%{% endif %}
+    </div>
+    <div class="stat-meta">Held-out disjoint domain evaluation</div>
+  </div>
+</div>
+
+<!-- Quick Scanner Box -->
+<div class="scanner-box">
+  <div class="card-header" style="margin-bottom:8px;">
+    <div>
+      <h2 class="card-title" style="font-size:1.25rem;">Real-Time URL Threat Classifier</h2>
+      <p class="card-subtitle">Zero-SSRF Lexical Analysis & Calibrated Probability Scoring</p>
+    </div>
+    <span class="badge-risk low">SSRF Protected</span>
+  </div>
+
+  <form id="scanForm" class="scanner-form">
+    <div class="input-wrapper">
+      <input type="text" id="urlInput" class="url-input" placeholder="Enter or paste untrusted URL (e.g. http://login.appleid-security-verify.com)..." required autocomplete="off">
+    </div>
+    <button type="submit" id="scanBtn" class="btn-scan">
+      <span>Scan URL</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+  </form>
+
+  <div id="scanErrorBox" style="display:none; margin-top:12px; padding:10px 14px; background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); border-radius:var(--radius-sm); color:#fca5a5; font-size:0.85rem;"></div>
+
+  <div class="sample-pills">
+    <span class="sample-title">Safe Demo Tests:</span>
+    <button type="button" class="sample-btn" data-url="https://www.google.com/search?q=cybersecurity">Google Search (Legit)</button>
+    <button type="button" class="sample-btn" data-url="https://github.com/torvalds/linux">GitHub Linux (Legit)</button>
+    <button type="button" class="sample-btn" data-url="http://paypal-verification-account-update.info/login?cmd=_login-run">PayPal Spoof (Phish)</button>
+    <button type="button" class="sample-btn" data-url="http://appleid-security-apple-com.support-auth.com/account/manage">AppleID Phish (Phish)</button>
+    <button type="button" class="sample-btn" data-url="http://192.168.1.105/bank/secure-login/index.html">IP Host Login (Phish)</button>
+  </div>
+</div>
+
+<!-- Scan Result Display (Appears when scan executes) -->
+<div id="scanResultCard" class="scan-result-card">
+  <div class="result-header">
+    <div>
+      <span style="font-size:0.75rem; color:var(--text-dim); text-transform:uppercase; font-weight:600;">Sanitized Target</span>
+      <div id="resUrl" style="font-family:var(--font-mono); font-size:1.05rem; font-weight:600; color:#fff; word-break:break-all; margin-top:2px;"></div>
+    </div>
+    <div id="resBadge" class="badge-risk low">Analyzing...</div>
+  </div>
+
+  <div class="risk-meter-wrapper">
+    <div class="risk-meter-labels">
+      <span>Calibrated Threat Probability</span>
+      <span id="resProbVal" style="font-family:var(--font-mono); font-weight:600;">0%</span>
+    </div>
+    <div class="meter-track">
+      <div id="resMeterFill" class="meter-fill" style="width:0%;"></div>
+    </div>
+  </div>
+
+  <div>
+    <h3 style="font-size:0.92rem; font-weight:600; color:#fff; margin-bottom:8px;">Contributing Lexical & Structural Factors</h3>
+    <div id="resFactors" class="factors-list"></div>
+  </div>
+
+  <div style="margin-top:20px; padding-top:16px; border-top:1px solid var(--border-subtle); display:flex; justify-content:space-between; align-items:center;">
+    <span style="font-size:0.78rem; color:var(--text-dim);">Classification is probabilistic based on lexical & structural features. Not a guarantee.</span>
+    <a href="{{ url_for('web.history_page') }}" class="btn-secondary" style="font-size:0.8rem;">View in History &rarr;</a>
+  </div>
+</div>
+
+<!-- Recent Audits Table -->
+<div class="card" style="margin-top:32px;">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">Recent Scans</h3>
+      <p class="card-subtitle">Latest incoming requests processed by URLShield</p>
+    </div>
+    <a href="{{ url_for('web.history_page') }}" class="btn-secondary">View Full History</a>
+  </div>
+
+  {% if recent_scans %}
+  <div class="table-responsive">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Domain</th>
+          <th>Sanitized URL</th>
+          <th>Classification</th>
+          <th>Probability</th>
+          <th>Time (UTC)</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for scan in recent_scans %}
+        <tr>
+          <td><code>{{ scan.domain }}</code></td>
+          <td style="max-width:320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="{{ scan.redacted_url }}">
+            {{ scan.redacted_url }}
+          </td>
+          <td><span class="badge-risk {{ scan.risk_tier }}">{{ scan.risk_label }}</span></td>
+          <td><strong>{{ (scan.probability * 100)|round(1) }}%</strong></td>
+          <td style="font-size:0.8rem; color:var(--text-muted);">{{ scan.created_at[:19].replace('T', ' ') }}</td>
+          <td>
+            <button class="btn-secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="viewScanDetails('{{ scan.id }}')">Inspect</button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 14.14 14.14"/></svg>
+    <div class="empty-title">No Scan Records Yet</div>
+    <div class="empty-desc">Submit your first URL above or click one of the demo samples to test the detection engine.</div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

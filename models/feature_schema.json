@@ -1,0 +1,183 @@
+{
+  "features": [
+    "url_length",
+    "host_length",
+    "path_length",
+    "query_length",
+    "num_dots",
+    "num_hyphens",
+    "num_digits",
+    "digit_ratio",
+    "num_subdomains",
+    "has_at_symbol",
+    "is_ip_host",
+    "is_private_ip",
+    "is_https",
+    "num_suspicious_keywords",
+    "has_suspicious_keyword",
+    "num_percent_encoded",
+    "has_punycode",
+    "url_entropy",
+    "host_entropy",
+    "num_path_segments",
+    "num_query_params",
+    "tld_length"
+  ],
+  "feature_count": 22,
+  "feature_statistics": {
+    "url_length": {
+      "index": 0,
+      "mean": 43.12,
+      "std": 28.2612,
+      "min": 14.0,
+      "max": 448.0
+    },
+    "host_length": {
+      "index": 1,
+      "mean": 18.1735,
+      "std": 9.5934,
+      "min": 4.0,
+      "max": 86.0
+    },
+    "path_length": {
+      "index": 2,
+      "mean": 14.6024,
+      "std": 22.4251,
+      "min": 0.0,
+      "max": 172.0
+    },
+    "query_length": {
+      "index": 3,
+      "mean": 2.2876,
+      "std": 17.6734,
+      "min": 0.0,
+      "max": 419.0
+    },
+    "num_dots": {
+      "index": 4,
+      "mean": 1.9799,
+      "std": 1.3416,
+      "min": 1.0,
+      "max": 21.0
+    },
+    "num_hyphens": {
+      "index": 5,
+      "mean": 0.8566,
+      "std": 1.5961,
+      "min": 0.0,
+      "max": 30.0
+    },
+    "num_digits": {
+      "index": 6,
+      "mean": 2.9862,
+      "std": 6.1396,
+      "min": 0.0,
+      "max": 99.0
+    },
+    "digit_ratio": {
+      "index": 7,
+      "mean": 0.052,
+      "std": 0.0856,
+      "min": 0.0,
+      "max": 0.7463
+    },
+    "num_subdomains": {
+      "index": 8,
+      "mean": 0.3035,
+      "std": 0.4914,
+      "min": 0.0,
+      "max": 5.0
+    },
+    "has_at_symbol": {
+      "index": 9,
+      "mean": 0.0033,
+      "std": 0.0577,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "is_ip_host": {
+      "index": 10,
+      "mean": 0.0025,
+      "std": 0.05,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "is_private_ip": {
+      "index": 11,
+      "mean": 0.0,
+      "std": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "is_https": {
+      "index": 12,
+      "mean": 0.8349,
+      "std": 0.3713,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "num_suspicious_keywords": {
+      "index": 13,
+      "mean": 0.1685,
+      "std": 0.4979,
+      "min": 0.0,
+      "max": 4.0
+    },
+    "has_suspicious_keyword": {
+      "index": 14,
+      "mean": 0.1196,
+      "std": 0.3245,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "num_percent_encoded": {
+      "index": 15,
+      "mean": 0.0242,
+      "std": 0.6481,
+      "min": 0.0,
+      "max": 22.0
+    },
+    "has_punycode": {
+      "index": 16,
+      "mean": 0.0004,
+      "std": 0.0204,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "url_entropy": {
+      "index": 17,
+      "mean": 4.1192,
+      "std": 0.3645,
+      "min": 2.8074,
+      "max": 5.7471
+    },
+    "host_entropy": {
+      "index": 18,
+      "mean": 3.385,
+      "std": 0.4801,
+      "min": 1.8366,
+      "max": 4.8985
+    },
+    "num_path_segments": {
+      "index": 19,
+      "mean": 1.4089,
+      "std": 1.545,
+      "min": 0.0,
+      "max": 7.0
+    },
+    "num_query_params": {
+      "index": 20,
+      "mean": 0.1104,
+      "std": 0.6198,
+      "min": 0.0,
+      "max": 12.0
+    },
+    "tld_length": {
+      "index": 21,
+      "mean": 3.0916,
+      "std": 0.8629,
+      "min": 0.0,
+      "max": 9.0
+    }
+  }
+}

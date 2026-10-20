@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Scan History & Audit Trail | URLShield{% endblock %}
+{% block heading %}Scan History & Audit Logs{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header" style="flex-wrap:wrap; gap:16px;">
+    <div>
+      <h2 class="card-title">Persistent Scan Registry</h2>
+      <p class="card-subtitle">Complete chronological record of processed and redacted URLs</p>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+      <a href="/api/v1/scans/export/csv" class="btn-secondary" style="display:flex; align-items:center; gap:6px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Export CSV</span>
+      </a>
+      <button id="clearHistoryBtn" class="btn-danger" style="display:flex; align-items:center; gap:6px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        <span>Clear All</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters Row -->
+  <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:20px; flex-wrap:wrap;">
+    <div style="flex:1; min-width:240px;">
+      <input type="text" id="historySearch" class="url-input" style="padding:8px 14px; font-size:0.86rem;" placeholder="Search by domain or path keyword...">
+    </div>
+
+    <div style="display:flex; align-items:center; gap:8px;">
+      <label style="font-size:0.82rem; color:var(--text-muted);">Risk Filter:</label>
+      <select id="historyRiskFilter" style="background:#0b1120; border:1px solid #2d3b56; color:#fff; padding:8px 12px; border-radius:var(--radius-sm); font-size:0.85rem; outline:none;">
+        <option value="">All Risk Levels</option>
+        <option value="low">Safe (Low Risk)</option>
+        <option value="medium">Suspicious (Medium Risk)</option>
+        <option value="high">Dangerous (High Risk)</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- History Table -->
+  <div class="table-responsive">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Target Domain</th>
+          <th>Sanitized URL</th>
+          <th>Classification</th>
+          <th>Probability</th>
+          <th>Processed (UTC)</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="historyTableBody">
+        <!-- Rendered asynchronously by dashboard.js -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination Controls -->
+  <div style="margin-top:20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+    <div id="paginationInfo" style="font-size:0.82rem; color:var(--text-dim);">
+      Showing records...
+    </div>
+
+    <div style="display:flex; gap:8px;">
+      <button id="historyPrevBtn" class="btn-secondary" disabled>&larr; Previous</button>
+      <button id="historyNextBtn" class="btn-secondary" disabled>Next &rarr;</button>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{
+  "dataset_name": "URLShield Phishing Intelligence Benchmark Dataset",
+  "provenance": {
+    "legitimate_source": "Tranco Research List (tranco-list.eu)",
+    "phishing_source": "abuse.ch URLhaus & OpenPhish Community Feed",
+    "license": "Tranco: CC-BY 4.0; URLhaus: CC0; OpenPhish: Open Community Feed"
+  },
+  "total_records": 2994,
+  "train_records": 2392,
+  "test_records": 602,
+  "train_class_balance": {
+    "legitimate": 1196,
+    "phishing": 1196
+  },
+  "test_class_balance": {
+    "legitimate": 304,
+    "phishing": 298
+  },
+  "leakage_prevention": "Domain-grouped split (Group-aware partition ensures no common registered domain between train and test sets)"
+}

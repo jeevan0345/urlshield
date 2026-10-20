@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}URLShield | Phishing Intelligence{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+      <div class="brand-header">
+        <div class="brand-icon">🛡️</div>
+        <div>
+          <div class="brand-title">URLShield</div>
+          <div class="brand-subtitle">Phishing Intelligence</div>
+        </div>
+      </div>
+
+      <ul class="nav-links">
+        <li class="nav-item {% if active_page == 'dashboard' %}active{% endif %}">
+          <a href="{{ url_for('web.dashboard_page') }}">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item {% if active_page == 'scan' %}active{% endif %}">
+          <a href="{{ url_for('web.scan_page') }}">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <span>Scan URL</span>
+          </a>
+        </li>
+        <li class="nav-item {% if active_page == 'history' %}active{% endif %}">
+          <a href="{{ url_for('web.history_page') }}">
+            <svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+            <span>Scan History</span>
+          </a>
+        </li>
+        <li class="nav-item {% if active_page == 'metrics' %}active{% endif %}">
+          <a href="{{ url_for('web.metrics_page') }}">
+            <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+            <span>Model Insights</span>
+          </a>
+        </li>
+        <li class="nav-item {% if active_page == 'methodology' %}active{% endif %}">
+          <a href="{{ url_for('web.methodology_page') }}">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            <span>Methodology</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="engine-status">
+          <div class="status-indicator">
+            <span class="status-dot"></span>
+            <span>ML Pipeline Ready</span>
+          </div>
+          <span style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-dim);">v1.0.0</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="app-main">
+      <header class="top-bar">
+        <div class="page-title-box">
+          <h1 class="page-heading">{% block heading %}Phishing Detection Dashboard{% endblock %}</h1>
+          <span class="demo-mode-badge" id="demoBadge" style="display:none;">DEMO ACTIVE</span>
+        </div>
+
+        <div class="top-bar-actions">
+          <label style="display:flex; align-items:center; gap:8px; font-size:0.82rem; color:var(--text-muted); cursor:pointer;">
+            <input type="checkbox" id="demoModeToggle" style="accent-color:var(--accent-teal); cursor:pointer;">
+            <span>Local Demo Mode</span>
+          </label>
+        </div>
+      </header>
+
+      <div class="content-body">
+        {% block content %}{% endblock %}
+      </div>
+
+      <footer style="padding:16px 32px; border-top:1px solid var(--border-subtle); font-size:0.75rem; color:var(--text-dim); text-align:center;">
+        URLShield operates as a probabilistic lexical analysis classifier. It does not visit target URLs or guarantee detection of zero-day attacks. Never enter sensitive credentials into unverified links.
+      </footer>
+    </main>
+  </div>
+
+  <!-- Scan Details Modal -->
+  <div class="modal-overlay" id="detailsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="card-title">Scan Telemetry Details</h3>
+        <button class="modal-close" id="modalCloseBtn">&times;</button>
+      </div>
+      <div class="modal-body" id="modalDetailsBody">
+        <!-- Rendered dynamically via dashboard.js -->
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

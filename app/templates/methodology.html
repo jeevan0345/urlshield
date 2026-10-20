@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Methodology & Security Architecture | URLShield{% endblock %}
+{% block heading %}Methodology & Security Principles{% endblock %}
+
+{% block content %}
+<div style="display:flex; flex-direction:column; gap:24px;">
+  <!-- Zero-SSRF Principle -->
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <h2 class="card-title" style="color:var(--accent-teal);">1. Zero-SSRF Architectural Immunity</h2>
+        <p class="card-subtitle">Passive string analysis without remote network execution</p>
+      </div>
+      <span class="badge-risk low">SSRF Safe</span>
+    </div>
+    <div style="font-size:0.9rem; color:var(--text-muted); line-height:1.7;">
+      <p>A fatal vulnerability in conventional security scanners is Server-Side Request Forgery (SSRF) and untrusted web scraping. When an automated engine visits a submitted URL, it exposes internal microservices (e.g. AWS/GCP metadata endpoints at <code>169.254.169.254</code>, internal Kubernetes APIs, or private subnets) to blind discovery and remote exploitation.</p>
+      <p style="margin-top:12px;"><strong>URLShield never visits, renders, or establishes TCP connections to audited URLs.</strong> Analysis is conducted purely through passive lexical decomposition, Shannon entropy measurement, structural grammar extraction, and machine learning inference. This guarantees immunity to SSRF, drive-by exploits, browser zero-days, and canary token triggers.</p>
+    </div>
+  </div>
+
+  <!-- Feature Taxonomy -->
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <h2 class="card-title">2. Engineered Feature Taxonomy</h2>
+        <p class="card-subtitle">22 high-discriminant lexical and structural signals</p>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Signal Category</th>
+            <th>Features Engineered</th>
+            <th>Adversarial Rationale</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Host Obfuscation</strong></td>
+            <td><code>is_ip_host</code>, <code>is_private_ip</code>, <code>has_punycode</code></td>
+            <td>Detects raw IP hosts and Punycode homograph attacks (e.g., Cyrillic 'а' replacing Latin 'a').</td>
+          </tr>
+          <tr>
+            <td><strong>Subdomain Nesting</strong></td>
+            <td><code>num_subdomains</code>, <code>num_dots</code>, <code>host_length</code></td>
+            <td>Adversaries stack subdomains (e.g. <code>paypal.com.account-verify.attacker.xyz</code>) to disguise true authority.</td>
+          </tr>
+          <tr>
+            <td><strong>Information Entropy</strong></td>
+            <td><code>url_entropy</code>, <code>host_entropy</code></td>
+            <td>Measures Shannon entropy (bits/symbol) to identify machine-generated domains (DGA) and hex tokens.</td>
+          </tr>
+          <tr>
+            <td><strong>Linguistic Intent</strong></td>
+            <td><code>num_suspicious_keywords</code>, <code>has_suspicious_keyword</code></td>
+            <td>Pinpoints targeted credential and financial terms (login, verify, banking, wallet) in untrusted contexts.</td>
+          </tr>
+          <tr>
+            <td><strong>Structural Anomaly</strong></td>
+            <td><code>digit_ratio</code>, <code>num_hyphens</code>, <code>num_percent_encoded</code></td>
+            <td>Identifies excessive hyphenation and percent-encoded evasion sequences designed to bypass simple regex filters.</td>
+          </tr>
+          <tr>
+            <td><strong>Transport Integrity</strong></td>
+            <td><code>is_https</code>, <code>tld_length</code>, <code>num_path_segments</code></td>
+            <td>Accounts for unencrypted transport schemes and atypical top-level domains.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Dataset Provenance & Leakage Mitigation -->
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <h2 class="card-title">3. Dataset Provenance & Leakage Prevention</h2>
+        <p class="card-subtitle">Academic research standards for legitimate and phishing samples</p>
+      </div>
+    </div>
+    <div style="font-size:0.9rem; color:var(--text-muted); line-height:1.7;">
+      <p>To eliminate data fabrication and synthetic bias, URLShield trains exclusively on validated public datasets:</p>
+      <ul style="margin:12px 0 12px 24px; display:flex; flex-direction:column; gap:6px;">
+        <li><strong>Legitimate Baseline:</strong> Research-backed Tranco Top Sites (NDSS 2019, CC-BY 4.0 license).</li>
+        <li><strong>Active Phishing:</strong> PhishTank Verified Feed (data.phishtank.com) and OpenPhish Community Feed.</li>
+        <li><strong>Malware Distribution:</strong> abuse.ch URLhaus (CC0 Public Domain).</li>
+      </ul>
+      <p><strong>Group-Aware Partitioning:</strong> In naive random splits, URLs from the same domain (e.g., different paths on <code>malicious-site.com</code>) leak into both train and test sets, causing grossly inflated accuracy. URLShield strictly groups training and validation sets by registered domain (<code>GroupKFold</code>), ensuring the test set contains 100% unseen domain infrastructure.</p>
+    </div>
+  </div>
+
+  <!-- Privacy Policy -->
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <h2 class="card-title">4. Privacy & Sensitive Query Redaction</h2>
+        <p class="card-subtitle">Protection against credential and session leakage in audit logs</p>
+      </div>
+    </div>
+    <div style="font-size:0.9rem; color:var(--text-muted); line-height:1.7;">
+      <p>Submitted URLs often contain authentication tokens, session IDs, or password reset parameters in query strings (e.g., <code>?token=secret123&pass=secret</code>). Before URLShield persists any scan into SQLite or outputs to logs, sensitive query parameters matching security keys are automatically stripped and replaced with <code>[REDACTED]</code>.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

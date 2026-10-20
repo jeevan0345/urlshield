@@ -1,0 +1,137 @@
+{
+  "model_name": "URLShield Phishing Detector",
+  "model_version": "1.0.0",
+  "chosen_algorithm": "RandomForest",
+  "calibration": "Platt Sigmoid Calibration (CalibratedClassifierCV)",
+  "training_timestamp": "2026-10-20T07:08:15.823685+00:00",
+  "cross_validation": {
+    "strategy": "5-Fold GroupKFold on registered domains",
+    "models_comparison": {
+      "LogisticRegression": {
+        "accuracy": 0.8404,
+        "precision": 0.9242,
+        "recall": 0.728,
+        "f1": 0.7979,
+        "roc_auc": 0.8377,
+        "pr_auc": 0.8903
+      },
+      "RandomForest": {
+        "accuracy": 0.9377,
+        "precision": 0.97,
+        "recall": 0.9038,
+        "f1": 0.9352,
+        "roc_auc": 0.9863,
+        "pr_auc": 0.988
+      }
+    }
+  },
+  "test_metrics": {
+    "accuracy": 0.9551,
+    "precision": 0.9593,
+    "recall": 0.9497,
+    "f1": 0.9545,
+    "roc_auc": 0.99,
+    "pr_auc": 0.9912,
+    "brier_score": 0.0375,
+    "confusion_matrix": {
+      "true_negatives": 292,
+      "false_positives": 12,
+      "false_negatives": 15,
+      "true_positives": 283
+    },
+    "sample_counts": {
+      "test_total": 602,
+      "test_legitimate": 304,
+      "test_phishing": 298
+    },
+    "false_positive_examples": [
+      {
+        "url": "https://www.flightradar24.com/careers",
+        "prob": 0.8577
+      },
+      {
+        "url": "https://samsungapps.com/",
+        "prob": 0.9399
+      },
+      {
+        "url": "https://safebrowsing.apple/help/faq",
+        "prob": 0.6486
+      },
+      {
+        "url": "https://163.com/register",
+        "prob": 0.5046
+      },
+      {
+        "url": "https://nexthink.cloud",
+        "prob": 0.9599
+      }
+    ],
+    "false_negative_examples": [
+      {
+        "url": "https://hifiu.com/reservation/vzcs",
+        "prob": 0.0046
+      },
+      {
+        "url": "https://quai-app.fr/lmk/src/",
+        "prob": 0.0037
+      },
+      {
+        "url": "https://takemotoen.com/yokd.osaka.jp",
+        "prob": 0.0271
+      },
+      {
+        "url": "http://idealldbs.com",
+        "prob": 0.0282
+      },
+      {
+        "url": "https://telepas-cl.com/norway/noo/taxx/use.php",
+        "prob": 0.3498
+      }
+    ]
+  },
+  "feature_importances": {
+    "num_subdomains": 0.1925,
+    "host_entropy": 0.1088,
+    "host_length": 0.1043,
+    "path_length": 0.1023,
+    "url_length": 0.0858,
+    "url_entropy": 0.0751,
+    "num_digits": 0.0737,
+    "digit_ratio": 0.0724,
+    "num_hyphens": 0.0682,
+    "num_path_segments": 0.0439,
+    "num_dots": 0.0218,
+    "tld_length": 0.0207,
+    "num_suspicious_keywords": 0.0109,
+    "has_suspicious_keyword": 0.007,
+    "query_length": 0.0049,
+    "num_query_params": 0.004,
+    "is_https": 0.003,
+    "is_ip_host": 0.0006,
+    "has_at_symbol": 0.0002,
+    "is_private_ip": 0.0,
+    "num_percent_encoded": 0.0,
+    "has_punycode": 0.0
+  },
+  "risk_thresholds": {
+    "safe": {
+      "min": 0.0,
+      "max": 0.35,
+      "label": "Low Risk (Legitimate)"
+    },
+    "suspicious": {
+      "min": 0.35,
+      "max": 0.7,
+      "label": "Medium Risk (Suspicious)"
+    },
+    "phishing": {
+      "min": 0.7,
+      "max": 1.0,
+      "label": "High Risk (Phishing)"
+    }
+  },
+  "provenance": {
+    "dataset_sources": "Tranco Top Sites + URLhaus / OpenPhish Feeds",
+    "leakage_mitigation": "Domain grouping partition across folds"
+  }
+}
